@@ -1,0 +1,7 @@
+config/secrets.py
+data/raw/*
+data/processed/*
+__pycache__/
+*.pyc
+.env
+venv/
