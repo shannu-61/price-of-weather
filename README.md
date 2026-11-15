@@ -1,172 +1,182 @@
-\# The Price of Weather: Dallas Business Impact Analysis
+# ⛅ The Price of Weather: Dallas Business Impact Analysis
 
-
-
-\## How does weather affect local business foot traffic in Dallas, TX?
-
-
+## How does weather affect local business foot traffic in Dallas, TX?
 
 This project analyzes 12 months of weather data against 8 business categories to quantify weather's financial impact on local businesses. Using statistical testing and machine learning, it reveals which businesses thrive or suffer under different weather conditions.
 
+---
 
+## 🔑 Key Findings
 
-\## Key Findings
+- **Parks lose 84% of visitors** on rainy days vs clear days
+- **Ice cream shops drop 52%** during rain
+- **Movie theaters gain 35%** on rainy days (people go indoors!)
+- **Shopping malls are most resilient** with only 15% drop
+- Customer sentiment drops from **0.77 (clear) to 0.58 (rainy)**
+- All findings are **statistically significant** (p < 0.05)
 
+---
 
-
-\- \*\*Parks lose 84% of visitors\*\* on rainy days vs clear days
-
-\- \*\*Ice cream shops drop 52%\*\* during rain
-
-\- \*\*Movie theaters gain 35%\*\* on rainy days (people go indoors!)
-
-\- \*\*Shopping malls are most resilient\*\* with only 15% drop
-
-\- Customer sentiment drops from \*\*0.77 (clear) to 0.58 (rainy)\*\*
-
-\- All findings are \*\*statistically significant\*\* (p < 0.05)
-
-
-
-\## Tech Stack
-
-
+## 🛠 Tech Stack
 
 | Layer | Tools |
-
 |-------|-------|
-
 | Data Collection | Python, OpenWeatherMap API, Google Places API, Yelp API |
-
 | Cloud Storage | Google BigQuery |
-
 | Pipeline | Prefect (automated ETL) |
-
 | Analysis | pandas, scipy, scikit-learn |
-
 | Visualization | Power BI (4-page dashboard), Streamlit (interactive web app) |
-
 | Charts | matplotlib, seaborn, plotly |
 
+---
 
+## 📊 Power BI Dashboard
 
-\## Project Structure
+### Page 1: Overview
+![Overview](screenshots/dashboard_page1_overview.png)
 
+### Page 2: Weather Deep Dive
+![Weather Deep Dive](screenshots/dashboard_page2_weather.png)
 
+### Page 3: Business Impact
+![Business Impact](screenshots/dashboard_page3_business.png)
+
+### Page 4: Sentiment Analysis
+![Sentiment](screenshots/dashboard_page4_sentiment.png)
+
+---
+
+## 🌐 Streamlit Web App
+
+Interactive web application with filters, heatmaps, and a weather prediction simulator.
+
+[🎬 Watch Streamlit Demo](screenshots/streamlit_demo.webm)
+
+---
+
+## 📁 Project Structure
 
 ```
-
 price-of-weather/
-
 ├── scripts/
-
-│   ├── fetch\_weather.py          # Current weather API
-
-│   ├── fetch\_historical\_weather.py # 12-month weather data
-
-│   ├── fetch\_businesses.py       # Google Places API
-
-│   ├── fetch\_yelp\_reviews.py     # Yelp business data
-
-│   ├── upload\_to\_bigquery.py     # BigQuery upload
-
-│   ├── pipeline.py               # Prefect ETL pipeline
-
-│   ├── clean\_and\_merge.py        # Data cleaning
-
-│   ├── simulate\_traffic.py       # Foot traffic model
-
-│   ├── analyze\_v2.py             # Statistical analysis
-
-│   ├── predict\_traffic.py        # ML prediction model
-
-│   ├── export\_for\_powerbi.py     # Power BI data prep
-
-│   └── app.py                    # Streamlit web app
-
-├── config/                       # API keys (gitignored)
-
+│   ├── fetch_weather.py              # Current weather from OpenWeatherMap
+│   ├── fetch_historical_weather.py   # 12-month weather from Visual Crossing
+│   ├── fetch_businesses.py           # Google Places API (8 categories)
+│   ├── fetch_yelp_reviews.py         # Yelp Fusion API business data
+│   ├── upload_to_bigquery.py         # Upload raw data to BigQuery
+│   ├── pipeline.py                   # Prefect automated ETL pipeline
+│   ├── clean_and_merge.py            # Data cleaning & feature engineering
+│   ├── simulate_traffic.py           # Realistic foot traffic simulation
+│   ├── analyze_v2.py                 # Statistical analysis & visualizations
+│   ├── predict_traffic.py            # Random Forest prediction model
+│   ├── export_for_powerbi.py         # Export data for Power BI
+│   └── app.py                        # Streamlit interactive web app
+├── config/                           # API keys & credentials (gitignored)
 ├── data/
-
-│   ├── raw/                      # Raw API data
-
-│   └── processed/                # Cleaned analysis data
-
+│   ├── raw/                          # Raw API responses
+│   └── processed/                    # Cleaned & analyzed data
+├── screenshots/                      # Dashboard & app screenshots
 ├── requirements.txt
-
 └── README.md
-
 ```
 
+---
 
+## 🚀 How to Run
 
-\## Dashboard Preview
+1. Clone this repo
+```bash
+git clone https://github.com/shannu-61/price-of-weather.git
+cd price-of-weather
+```
 
+2. Create virtual environment
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
+3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
-\### Power BI Dashboard
+4. Add your API keys in `config/secrets.py`
+```python
+OPENWEATHER_API_KEY = "your_key"
+VISUAL_CROSSING_API_KEY = "your_key"
+GOOGLE_PLACES_API_KEY = "your_key"
+YELP_API_KEY = "your_key"
+```
 
-\*4-page interactive dashboard with weather impact analysis, business comparisons, and sentiment scoring.\*
+5. Add BigQuery service account key as `config/bigquery_key.json`
 
+6. Run the full pipeline
+```bash
+python scripts/pipeline.py
+```
 
+7. Run the analysis
+```bash
+python scripts/analyze_v2.py
+python scripts/predict_traffic.py
+```
 
-\### Streamlit Web App
+8. Launch the Streamlit app
+```bash
+streamlit run scripts/app.py
+```
 
-\*Interactive web application with filters, heatmaps, and a weather prediction simulator.\*
+---
 
+## 📈 Statistical Methods
 
+| Method | Purpose | Result |
+|--------|---------|--------|
+| Independent T-test | Compare rainy vs clear day visitors | 5/8 categories significant (p < 0.05) |
+| Pearson Correlation | Temperature vs foot traffic | r = -0.365 for parks (strong negative) |
+| Random Forest | Predict visitors from weather | Trained per-category models |
+| Sentiment Scoring | Customer mood vs weather | Clear = 0.77, Rainy = 0.58 |
 
-\## How to Run
+---
 
+## 📦 Data Sources
 
+| Source | Data | Records |
+|--------|------|---------|
+| OpenWeatherMap API | Current Dallas weather | Daily |
+| Visual Crossing API | 12-month historical weather | 366 days |
+| Google Places API | Business locations & ratings | 80 businesses |
+| Yelp Fusion API | Business reviews & ratings | 80 businesses |
 
-1\. Clone this repo
+**BigQuery Tables:** daily_weather, google_businesses, yelp_businesses, weather_clean, business_clean, analysis_table, daily_traffic
 
-2\. Install dependencies: `pip install -r requirements.txt`
+---
 
-3\. Add your API keys in `config/secrets.py`
+## 💡 Business Insights
 
-4\. Add BigQuery service account key as `config/bigquery\_key.json`
+### Winners on Rainy Days
+- Movie Theaters (+35%)
+- Shopping Malls (+17%)
+- Gyms (+10%)
 
-5\. Run the pipeline: `python scripts/pipeline.py`
+### Losers on Rainy Days
+- Parks (-68%)
+- Ice Cream Shops (-52%)
+- Cafes (-25%)
 
-6\. Launch the app: `streamlit run scripts/app.py`
+### Recommendation
+Local businesses should use weather forecasts to adjust staffing, inventory, and marketing. Indoor businesses can capitalize on bad weather with targeted promotions.
 
+---
 
+## 👤 Author
 
-\## Statistical Methods
+**Shanmuga Kothapalli**
+*Mid-Level Data Analyst | Dallas, TX*
 
+---
 
+## 📄 License
 
-\- \*\*T-tests\*\*: Comparing visitor counts between weather conditions
-
-\- \*\*Pearson correlation\*\*: Temperature and precipitation vs foot traffic
-
-\- \*\*Random Forest regression\*\*: Predicting visitors given weather forecast
-
-\- \*\*Sentiment analysis\*\*: Customer mood scoring by weather condition
-
-
-
-\## Data Sources
-
-
-
-\- OpenWeatherMap API (current weather)
-
-\- Visual Crossing API (12-month historical weather)
-
-\- Google Places API (business locations and ratings)
-
-\- Yelp Fusion API (business reviews and ratings)
-
-
-
-\## Author
-
-
-
-\*\*Shanmuga Kothapalli\*\*
-
-\*Mid-Level Data Analyst | Dallas, TX\*
-
+This project is for portfolio and educational purposes.
